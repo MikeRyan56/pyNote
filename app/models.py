@@ -76,7 +76,7 @@ class Note(Model): # Change Contact to Note
     # tags_id = Column(Integer, ForeignKey('tags.id'), nullable=False)
     # tags = relationship("Tags")
     tags = relationship('Tags', secondary=assoc_tags_notes, backref='note')
-    my_note = Column(Text())
+    my_note = Column(Text(), nullable=False)
     created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) # Column(Integer)
     created_date = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
 #    txt_count = Column(Integer, default=text_count(my_note))
@@ -150,52 +150,23 @@ class IdeaNotes(BaseMixin, Base):
     description = Column(Text())
     is_active = Column(Boolean, unique=False, default=True)
     created_date = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
-    #follow_up_date = Column(DateTime, default=set_date_plus7, nullable=False) 
+    follow_up_date = Column(DateTime, default=set_date_plus7, nullable=False)
     idea_id = Column(Integer, ForeignKey('idea.id'), nullable=False)
     idea_group = relationship("Idea")
     
     # @hybrid_property
-    # def name(self):
+    # def name_concate(self):
     #     s = str(title + ' - ' + created_date )
     #     return s
 
-    # @hybrid_property
-    # def word_count(self):
-    #     wc = re.findall("(\S+)", self.description)
-    #     return len(wc)
+    @hybrid_property
+    def word_count(self):
+        wc = re.findall("(\S+)", self.description)
+        return len(wc)
 
     def __repr__(self):
         return self.title
 
-# assoc_tags_ideas = Table('tags_ideas', Model.metadata,
-#                                       Column('id', Integer, primary_key=True),
-#                                       Column('tags_id', Integer, ForeignKey('tags.id')),
-#                                       Column('ideas_id', Integer, ForeignKey('idea.id'))
-# )
-
-# class Idea(BaseMixin, Base): # Change Contact to Note
-#     id = Column(Integer, primary_key=True)
-#     tags = relationship('Tags', secondary=assoc_tags_ideas, backref='idea')
-#     title = Column(String(100))
-#     my_idea = Column(Text())
-#     is_active = Column(Boolean, unique=False, default=True)
-#     created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) # Column(Integer)
-#     created_date = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
-
-#     # def __repr__(self):
-#     #     return self.title
-
-# class IdeaNotes(BaseMixin, Base):
-#     id = Column(Integer, primary_key=True)
-#     inote = Column(Text())
-#     is_active = Column(Boolean, unique=False, default=True)
-#     created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) # Column(Integer)
-#     created_date = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
-#     idea_id = Column(Integer, ForeignKey('idea.id'), nullable=False)
-#     idea = relationship("Idea")
-    
-    # def __repr__(self):
-    #     return self.i_note
 
 # class Job(Model): # Change Contact to Note
 #     id = Column(Integer, primary_key=True)

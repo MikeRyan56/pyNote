@@ -5,7 +5,7 @@ from flask_appbuilder.actions import action
 from app import appbuilder, db
 from flask_appbuilder.views import MasterDetailView
 from flask_appbuilder.charts.views import GroupByChartView
-from flask_appbuilder.models.group import aggregate_count, aggregate_sum
+from flask_appbuilder.models.group import aggregate_count, aggregate_sum, aggregate_avg
 from flask_login import LoginManager, UserMixin, login_required
 from flask import g
 from flask_appbuilder.models.sqla.filters import FilterStartsWith, FilterEqualFunction
@@ -41,6 +41,7 @@ def pre_fill_db():
         db.session.add(Mood(mood_name='Neutral'))
         db.session.add(Mood(mood_name='Negative'))
         db.session.add(Mood(mood_name='Mixed'))
+        db.session.add(Tags(tag_name='Unknown'))
         db.session.add(Tags(tag_name='Work'))
         db.session.add(Tags(tag_name='Life'))
         db.session.add(Tags(tag_name='Fun'))
@@ -73,7 +74,7 @@ def get_user():
 class ContactGeneralView(ModelView):
     datamodel = SQLAInterface(Contact)
 
-    label_columns = {'contact_grouo': 'Contacts Group'}
+    label_columns = {'contact_group': 'Contacts Group'}
     list_columns = ['name', 'personal_phone', 'contact_group']
 
     base_order = ('name', 'asc')
@@ -117,28 +118,28 @@ class IdeaNotesGeneralView(ModelView):
     label_columns = {'idea_group': 'idea'}
     list_columns = ['title', 'is_active','created_date','idea_group']
 
-    #base_order = ('title', 'asc')
+    base_order = ('created_date', 'desc')
 
     show_fieldsets = [
-        ('Summary', {'fields': ['title','description','is_active','created_date','idea_group']}),
-        # (
-        #     'Idea Note Details',
-        #     {'fields': ['is_active','follow_up_date'], 'expanded': True}),
+        ('Summary', {'fields': ['title','description','follow_up_date','idea_group']}),
+        (
+            'Idea Note Details',
+            {'fields': ['is_active','created_date'], 'expanded': False}),
     ]
 
     add_fieldsets = [
-        ('Summary', {'fields': ['title','description','is_active','created_date','idea_group']}),
-        # (
-            # 'Idea Note Details',
-            # {'fields': ['is_active','follow_up_date',], 'expanded': True}),
-    ]
+        ('Summary', {'fields': ['title','description','follow_up_date','idea_group']}),
+        (
+            'Idea Note Details',
+            {'fields': ['is_active','created_date'], 'expanded': False}),
+        ]
 
     edit_fieldsets = [
-        ('Summary', {'fields': ['title','description','is_active','created_date','idea_group']}),
-        # (
-        #     'Idea Note Details',
-        #     {'fields': ['is_active','follow_up_date',], 'expanded': True}),
-    ]
+        ('Summary', {'fields': ['title','description','follow_up_date','idea_group']}),
+        (
+            'Idea Note Details',
+            {'fields': ['is_active','created_date'], 'expanded': False}),
+        ]
 
 
 
@@ -160,15 +161,38 @@ class TagsModelView(ModelView):
     datamodel = SQLAInterface(Tags)
 
 
+# function to get the currently logged in user
+# user to set created_by in multiple tables
+# also to filter by on charts and views
 def get_user():
     return g.user.id
 
 class NoteModelView(ModelView):
     datamodel = SQLAInterface(Note)
     base_filters = [['created_by', FilterEqualFunction, get_user]]
-    #base_order = ('created_date', 'dsc')
-    related_views = [MoodModelView, TagsModelView]
-    list_columns = ['created_date','created_by', 'mood','tags']
+    base_order = ('created_date', 'desc')
+    # related_views = [MoodModelView, TagsModelView]
+    list_columns = ['mood','tags','created_date','created_by']
+    show_fieldsets = [
+        ('Summary', {'fields': ['mood','tags','my_note']}),
+        (
+            'Note Details',
+            {'fields': ['created_date'], 'expanded': False}),
+    ]
+
+    add_fieldsets = [
+        ('Summary', {'fields': ['mood','tags','my_note']}),
+        (
+            'Note Details',
+            {'fields': ['created_date'], 'expanded': False}),
+    ]
+
+    edit_fieldsets = [
+        ('Summary', {'fields': ['mood','tags','my_note']}),
+        (
+            'Note Details',
+            {'fields': ['created_date'], 'expanded': False}),
+    ]
 
 # class JobNotesModelView(ModelView):
 #     datamodel = SQLAInterface(JobNotes)
@@ -201,17 +225,40 @@ class NoteChartView(GroupByChartView):
     datamodel = SQLAInterface(Note)
     chart_title = 'Grouped Notes'
     label_columns = NoteModelView.label_columns
-    chart_type = 'PieChart' #'ColumnChart' #PieChart'
+    chart_type = 'ColumnChart' #'ColumnChart' #PieChart'
+    base_filters = [['created_by', FilterEqualFunction, get_user]]
 
     definitions = [
         {
+            'label': 'Word Count by User',
             'group': 'created_by',
             'series': [(aggregate_sum, 'word_count')]
         },
         {
+            'label': 'Word Count by Mood',
             'group': 'mood_id',
             'series': [(aggregate_sum, 'word_count')]
-        }
+        },
+        # {
+        #     'label': 'Word Count by Tags',
+        #     'group': 'tags_id',
+        #     'series': [(aggregate_sum, 'word_count')]
+        # },
+        {
+            'label': 'Character Count by User',
+            'group': 'created_by',
+            'series': [(aggregate_sum, 'text_count')]
+        },
+        {
+            'label': 'Character Count by Mood',
+            'group': 'mood_id',
+            'series': [(aggregate_sum, 'text_count')]
+        },
+        # {
+        #     'label': 'Character Count by Tags',
+        #     'group': 'tags',
+        #     'series': [(aggregate_sum, 'text_count')]
+        # },
     ]
 
 
@@ -221,22 +268,37 @@ def pretty_month_year(value):
 def pretty_year(value):
     return str(value.year)
 
+
 class NoteTimeChartView(GroupByChartView):
     datamodel = SQLAInterface(Note)
-
+    base_filters = [['created_by', FilterEqualFunction, get_user]]
     chart_title = 'Grouped Create Date'
     chart_type = 'ColumnChart' #'ColumnChart' 'PieChart''AreaChart'
     label_columns = NoteModelView.label_columns
     definitions = [
         {
+            'label': 'Character Count by Month/Year',
             'group': 'month_year',
             'formatter': pretty_month_year,
             'series': [(aggregate_sum, 'text_count')]
         },
         {
+            'label': 'Character Count by Year',
             'group': 'year',
             'formatter': pretty_year,
             'series': [(aggregate_sum, 'text_count')]
+        },
+        {
+            'label': 'Count of Notes by Month/Year',
+            'group': 'month_year',
+            'formatter': pretty_month_year,
+            'series': [(aggregate_count, 'id')]
+        },
+        {
+            'label': 'Count of Notes by Year',
+            'group': 'year',
+            'formatter': pretty_year,
+            'series': [(aggregate_count, 'id')]
         }
     ]
 
@@ -250,9 +312,9 @@ appbuilder.add_separator("Contacts")
 appbuilder.add_view(GroupGeneralView, "Manage Groups", icon="fa-folder-open-o", category="Contacts")
 appbuilder.add_view(ContactGeneralView, "List Contacts", icon="fa-envelope", category="Contacts")
 
-appbuilder.add_view(IdeaMasterView, "List Ideas", icon="fa-folder-open-o", category="Ideas")
+appbuilder.add_view(IdeaMasterView, "Update Ideas", icon="fa-folder-open-o", category="Ideas")
 appbuilder.add_separator("Ideas")
-appbuilder.add_view(IdeaGeneralView, "Manage Ideas", icon="fa-folder-open-o", category="Ideas")
+appbuilder.add_view(IdeaGeneralView, "List of Ideas", icon="fa-folder-open-o", category="Ideas")
 appbuilder.add_view(IdeaNotesGeneralView, "List Notes", icon="fa-envelope", category="Ideas")
 
 
