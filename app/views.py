@@ -19,7 +19,7 @@ import datetime
 from flask_appbuilder.fieldwidgets import Select2AJAXWidget, Select2SlaveAJAXWidget, Select2Widget
 from flask_appbuilder.fields import AJAXSelectField
 from flask_appbuilder.widgets import FormHorizontalWidget, FormInlineWidget, FormVerticalWidget
-from .models import ContactGroup, Gender, Contact
+# from .models import ContactGroup, Gender, Contact
 """
     Create your Views::
 
@@ -59,57 +59,54 @@ def pre_fill_db():
 
 pre_fill_db()
 
-def fill_gender():
-    try:
-        db.session.add(Gender(name='Male'))
-        db.session.add(Gender(name='Female'))
-        db.session.commit()
-    except:
-        db.session.rollback()
+# def fill_gender():
+#     try:
+#         db.session.add(Gender(name='Male'))
+#         db.session.add(Gender(name='Female'))
+#         db.session.commit()
+#     except:
+#         db.session.rollback()
+# fill_gender()
 
-def get_user():
-    return g.user.id
+# class ContactGeneralView(ModelView):
+#     datamodel = SQLAInterface(Contact)
 
+#     label_columns = {'contact_group': 'Contacts Group'}
+#     list_columns = ['name', 'personal_phone', 'contact_group']
 
-class ContactGeneralView(ModelView):
-    datamodel = SQLAInterface(Contact)
+#     base_order = ('name', 'asc')
 
-    label_columns = {'contact_group': 'Contacts Group'}
-    list_columns = ['name', 'personal_phone', 'contact_group']
+#     show_fieldsets = [
+#         ('Summary', {'fields': ['name', 'gender', 'contact_group']}),
+#         (
+#             'Personal Info',
+#             {'fields': ['address', 'birthday', 'personal_phone', 'personal_celphone'], 'expanded': False}),
+#     ]
 
-    base_order = ('name', 'asc')
+#     add_fieldsets = [
+#         ('Summary', {'fields': ['name', 'gender', 'contact_group']}),
+#         (
+#             'Personal Info',
+#             {'fields': ['address', 'birthday', 'personal_phone', 'personal_celphone'], 'expanded': False}),
+#     ]
 
-    show_fieldsets = [
-        ('Summary', {'fields': ['name', 'gender', 'contact_group']}),
-        (
-            'Personal Info',
-            {'fields': ['address', 'birthday', 'personal_phone', 'personal_celphone'], 'expanded': False}),
-    ]
-
-    add_fieldsets = [
-        ('Summary', {'fields': ['name', 'gender', 'contact_group']}),
-        (
-            'Personal Info',
-            {'fields': ['address', 'birthday', 'personal_phone', 'personal_celphone'], 'expanded': False}),
-    ]
-
-    edit_fieldsets = [
-        ('Summary', {'fields': ['name', 'gender', 'contact_group']}),
-        (
-            'Personal Info',
-            {'fields': ['address', 'birthday', 'personal_phone', 'personal_celphone'], 'expanded': False}),
-    ]
+#     edit_fieldsets = [
+#         ('Summary', {'fields': ['name', 'gender', 'contact_group']}),
+#         (
+#             'Personal Info',
+#             {'fields': ['address', 'birthday', 'personal_phone', 'personal_celphone'], 'expanded': False}),
+#     ]
 
 
 
-class GroupMasterView(MasterDetailView):
-    datamodel = SQLAInterface(ContactGroup)
-    related_views = [ContactGeneralView]
+# class GroupMasterView(MasterDetailView):
+#     datamodel = SQLAInterface(ContactGroup)
+#     related_views = [ContactGeneralView]
 
 
-class GroupGeneralView(ModelView):
-    datamodel = SQLAInterface(ContactGroup)
-    related_views = [ContactGeneralView]
+# class GroupGeneralView(ModelView):
+#     datamodel = SQLAInterface(ContactGroup)
+#     related_views = [ContactGeneralView]
 
 
 class IdeaNotesGeneralView(ModelView):
@@ -306,11 +303,11 @@ class NoteTimeChartView(GroupByChartView):
 # appbuilder.add_view(GroupModelView, "List Groups", icon="fa-folder-open-o", category="Notes", category_icon='fa-envelope')
 # appbuilder.add_view(JobModelView, "Jobs", icon="fa-comment", category="Jobs", category_icon='fa-comment')
 # appbuilder.add_separator("Jobs")
-fill_gender()
-appbuilder.add_view(GroupMasterView, "List Groups", icon="fa-folder-open-o", category="Contacts")
-appbuilder.add_separator("Contacts")
-appbuilder.add_view(GroupGeneralView, "Manage Groups", icon="fa-folder-open-o", category="Contacts")
-appbuilder.add_view(ContactGeneralView, "List Contacts", icon="fa-envelope", category="Contacts")
+
+# appbuilder.add_view(GroupMasterView, "List Groups", icon="fa-folder-open-o", category="Contacts")
+# appbuilder.add_separator("Contacts")
+# appbuilder.add_view(GroupGeneralView, "Manage Groups", icon="fa-folder-open-o", category="Contacts")
+# appbuilder.add_view(ContactGeneralView, "List Contacts", icon="fa-envelope", category="Contacts")
 
 appbuilder.add_view(IdeaMasterView, "Update Ideas", icon="fa-folder-open-o", category="Ideas")
 appbuilder.add_separator("Ideas")
