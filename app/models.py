@@ -49,13 +49,6 @@ class Tags(Model):
     def __str__(self):
         return self.tag_name
 
-# def get_user_id(cls):
-#         try:
-#             return g.user.id
-#         except Exception as e:
-#             # log.warning("AuditMixin Get User ID {0}".format(str(e)))
-#             return None
-
 def get_user():
     return g.user.id
 
@@ -73,14 +66,10 @@ class Note(Model): # Change Contact to Note
     id = Column(Integer, primary_key=True)
     mood_id = Column(Integer, ForeignKey('mood.id'), nullable=False)
     mood = relationship("Mood")
-    # tags_id = Column(Integer, ForeignKey('tags.id'), nullable=False)
-    # tags = relationship("Tags")
     tags = relationship('Tags', secondary=assoc_tags_notes, backref='note')
     my_note = Column(Text(), nullable=False)
     created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) # Column(Integer)
     created_date = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
-#    txt_count = Column(Integer, default=text_count(my_note))
-
 
     @hybrid_property
     def word_count(self):
@@ -101,36 +90,6 @@ class Note(Model): # Change Contact to Note
         return datetime.datetime(date.year, 1, 1)
 
 
-# class ContactGroup(BaseMixin, Base):
-#     id = Column(Integer, primary_key=True)
-#     name = Column(String(50), unique = True, nullable=False)
-
-#     def __repr__(self):
-#         return self.name
-
-
-# class Gender(BaseMixin, Base):
-#     id = Column(Integer, primary_key=True)
-#     name = Column(String(50), unique = True, nullable=False)
-
-#     def __repr__(self):
-#         return self.name
-
-
-# class Contact(BaseMixin, Base):
-#     id = Column(Integer, primary_key=True)
-#     name =  Column(String(150), unique = True, nullable=False)
-#     address = Column(String(564))
-#     birthday = Column(Date, nullable=True)
-#     personal_phone = Column(String(20))
-#     personal_celphone = Column(String(20))
-#     contact_group_id = Column(Integer, ForeignKey('contact_group.id'), nullable=False)
-#     contact_group = relationship("ContactGroup")
-#     gender_id = Column(Integer, ForeignKey('gender.id'), nullable=False)
-#     gender = relationship("Gender")
-
-#     def __repr__(self):
-#         return self.name
 
 class Idea(BaseMixin, Base):
     id = Column(Integer, primary_key=True)
@@ -154,11 +113,6 @@ class IdeaNotes(BaseMixin, Base):
     idea_id = Column(Integer, ForeignKey('idea.id'), nullable=False)
     idea_group = relationship("Idea")
     
-    # @hybrid_property
-    # def name_concate(self):
-    #     s = str(title + ' - ' + created_date )
-    #     return s
-
     @hybrid_property
     def word_count(self):
         wc = re.findall("(\S+)", self.description)
