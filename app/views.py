@@ -153,7 +153,7 @@ class NoteChartView(GroupByChartView):
     datamodel = SQLAInterface(Note)
     chart_title = 'Notes Character and Word Counts '
     label_columns = NoteModelView.label_columns
-    chart_type = 'ColumnChart' #'ColumnChart' 'PieChart''AreaChart''LineChart'
+    chart_type = 'PieChart' #'ColumnChart' 'PieChart''AreaChart''LineChart'
     base_filters = [['created_by', FilterEqualFunction, get_user]]
 
     definitions = [
@@ -265,20 +265,21 @@ class IdeaTimeChartView(GroupByChartView):
 # appbuilder.add_view(JobModelView, "Jobs", icon="fa-comment", category="Jobs", category_icon='fa-comment')
 # appbuilder.add_separator("Jobs")
 
-appbuilder.add_view(IdeaGeneralView, "List of Ideas", icon="fa-folder-open-o", category="Ideas")
-appbuilder.add_separator("Ideas")
-appbuilder.add_view(IdeaMasterView, "Add/Update Ideas", icon="fa-folder-open-o", category="Ideas")
-appbuilder.add_view(IdeaNotesGeneralView, "List Notes", icon="fa-envelope", category="Ideas")
-
-appbuilder.add_view(NoteModelView, "Notes", icon="fa-comment", category="Notes", category_icon='fa-comment')
-appbuilder.add_separator("Notes")
-appbuilder.add_view(TagsModelView, "List Tags", icon="fa-tags", category="Notes", category_icon='fa-tags')
-appbuilder.add_view(MoodModelView, "List Moods", icon="fa-tags", category="Notes", category_icon='fa-tags')
+appbuilder.add_view(NoteModelView, "Notes", icon="fa-comment", category="Thoughts", category_icon='fa-comment')
+appbuilder.add_separator("Thoughts")
+appbuilder.add_view(IdeaGeneralView, "List of Ideas", icon="fa-folder-open-o", category="Thoughts")
+appbuilder.add_separator("Thoughts")
+appbuilder.add_view(IdeaMasterView, "Add/Update Ideas", icon="fa-folder-open-o", category="Thoughts")
+appbuilder.add_view(IdeaNotesGeneralView, "List Notes", icon="fa-envelope", category="Thoughts")
 
 appbuilder.add_view(NoteChartView, "Notes Chart", icon="fa-dashboard", category="Charts")
 appbuilder.add_view(NoteTimeChartView, "Notes Time Chart", icon="fa-dashboard", category="Charts")
 appbuilder.add_view(IdeaChartView, "Ideas Chart", icon="fa-dashboard", category="Charts")
 appbuilder.add_view(IdeaTimeChartView, "Ideas Time Chart", icon="fa-dashboard", category="Charts")
+
+appbuilder.add_view(TagsModelView, "List Tags", icon="fa-tags", category="Configuration", category_icon='fa-tags')
+appbuilder.add_view(MoodModelView, "List Moods", icon="fa-tags", category="Configuration", category_icon='fa-tags')
+
 appbuilder.security_cleanup()
 
 """
