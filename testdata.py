@@ -5,11 +5,11 @@ import random
 from datetime import datetime
 
 
-def date_now(self):
-    s = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    return s
+# def date_now(self):
+#     s = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+#     return s
 
-addmood = ['Positive','Neutral', 'Negative','Mixed']
+# addmood = ['Positive','Neutral', 'Negative','Mixed']
   
 
 # def pre_fill_db():
@@ -36,38 +36,38 @@ addmood = ['Positive','Neutral', 'Negative','Mixed']
 
 # pre_fill_db()
 
-log = logging.getLogger(__name__)
+# log = logging.getLogger(__name__)
 
-def date_now(self):
-    s = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    return s
+# def date_now(self):
+#     s = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+#     return s
 
-addmood = ['Positive','Neutral', 'Negative','Mixed']
+# addmood = ['Positive','Neutral', 'Negative','Mixed']
 
 # def get_random_name(names_list, size=1):
 #     name_lst = [names_list[random.randrange(0, len(names_list))].capitalize() for i in range(0, size)]
 #     return " ".join(name_lst)
 
-try:
-    db.session.query(Tags).delete()
-    db.session.query(Mood).delete()
-    # db.session.query(Note).delete()
-except:
-    db.session.rollback()
+# try:
+#     db.session.query(Tags).delete()
+#     db.session.query(Mood).delete()
+#     # db.session.query(Note).delete()
+# except:
+#     db.session.rollback()
 
-try:
-    ideas = []
-    ideas.append(Idea(name='This One'))
-    ideas.append(Idea(name='This Two'))
-    ideas.append(Idea(name='This Three'))
-    db.session.add(ideas[0])
-    db.session.add(ideas[1])
-    db.session.add(ideas[2])
-    print(ideas[0].id)
-    db.session.commit()
-except ValueError:
-    log.error("Creating Ideas: %s", ValueError)
-    db.session.rollback()
+# try:
+#     ideas = []
+#     ideas.append(Idea(name='This One'))
+#     ideas.append(Idea(name='This Two'))
+#     ideas.append(Idea(name='This Three'))
+#     db.session.add(ideas[0])
+#     db.session.add(ideas[1])
+#     db.session.add(ideas[2])
+#     print(ideas[0].id)
+#     db.session.commit()
+# except ValueError:
+#     log.error("Creating Ideas: %s", ValueError)
+#     db.session.rollback()
 
 
 # try:
