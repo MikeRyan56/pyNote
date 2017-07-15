@@ -96,7 +96,7 @@ class NoteModelView(ModelView):
     base_filters = [['created_by', FilterEqualFunction, get_user]]
     base_order = ('created_date', 'desc')
     # related_views = [MoodModelView, TagsModelView]
-    list_columns = ['created_by','mood','tags','created_date']
+    list_columns = ['mood','tags','created_date']
     show_fieldsets = [
         ('Summary', {'fields': ['mood','tags','my_note', 'word_count']}),
         (
