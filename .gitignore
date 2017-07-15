@@ -11,3 +11,7 @@ env
 #pycache
 __pycache__
 *.sublime*
+
+#Files to ignore
+tags_note.csv
+

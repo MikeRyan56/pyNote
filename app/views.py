@@ -120,12 +120,12 @@ class NoteModelView(ModelView):
     base_filters = [['created_by', FilterEqualFunction, get_user]]
     base_order = ('created_date', 'desc')
     # related_views = [MoodModelView, TagsModelView]
-    list_columns = ['mood','tags','created_date','created_by']
+    list_columns = ['created_by','mood','tags','created_date']
     show_fieldsets = [
-        ('Summary', {'fields': ['mood','tags','my_note']}),
+        ('Summary', {'fields': ['mood','tags','my_note', 'word_count']}),
         (
             'Note Details',
-            {'fields': ['created_date'], 'expanded': False}),
+            {'fields': ['created_date',], 'expanded': False}),
     ]
 
     add_fieldsets = [
@@ -169,6 +169,14 @@ class NoteModelView(ModelView):
 
 
 
+
+
+def pretty_month_year(value):
+    return calendar.month_name[value.month] + ' ' + str(value.year)
+
+def pretty_year(value):
+    return str(value.year)
+
 class NoteChartView(GroupByChartView):
     datamodel = SQLAInterface(Note)
     chart_title = 'Grouped Notes'
@@ -189,8 +197,8 @@ class NoteChartView(GroupByChartView):
         },
         # {
         #     'label': 'Word Count by Tags',
-        #     'group': 'tags_id',
-        #     'series': [(aggregate_sum, 'word_count')]
+        #     'group': 'month_year',
+        #     'series': [(aggregate_avg, 'word_count'),(aggregate_avg, 'id')]
         # },
         {
             'label': 'Character Count by User',
@@ -202,26 +210,13 @@ class NoteChartView(GroupByChartView):
             'group': 'mood_id',
             'series': [(aggregate_sum, 'text_count')]
         },
-        # {
-        #     'label': 'Character Count by Tags',
-        #     'group': 'tags',
-        #     'series': [(aggregate_sum, 'text_count')]
-        # },
     ]
-
-
-def pretty_month_year(value):
-    return calendar.month_name[value.month] + ' ' + str(value.year)
-
-def pretty_year(value):
-    return str(value.year)
-
 
 class NoteTimeChartView(GroupByChartView):
     datamodel = SQLAInterface(Note)
     base_filters = [['created_by', FilterEqualFunction, get_user]]
     chart_title = 'Grouped Create Date'
-    chart_type = 'ColumnChart' #'ColumnChart' 'PieChart''AreaChart'
+    chart_type = 'AreaChart' #'ColumnChart' 'PieChart''AreaChart'
     label_columns = NoteModelView.label_columns
     definitions = [
         {
@@ -240,16 +235,68 @@ class NoteTimeChartView(GroupByChartView):
             'label': 'Count of Notes by Month/Year',
             'group': 'month_year',
             'formatter': pretty_month_year,
-            'series': [(aggregate_count, 'id')]
+            'series': [(aggregate_count, 'id'),(aggregate_avg, 'word_count')]
         },
         {
             'label': 'Count of Notes by Year',
             'group': 'year',
             'formatter': pretty_year,
-            'series': [(aggregate_count, 'id')]
+            'series': [(aggregate_count, 'id'),(aggregate_avg, 'word_count')]
         }
     ]
 
+class IdeaChartView(GroupByChartView):
+    datamodel = SQLAInterface(Idea)
+    chart_title = 'Ideas by Status'
+    label_columns = IdeaGeneralView.label_columns
+    chart_type = 'ColumnChart' #'ColumnChart' #PieChart'
+    base_filters = [['created_by', FilterEqualFunction, get_user]]
+
+    definitions = [
+        {
+            'label': 'Idea by Status User',
+            'group': 'is_active',
+            'series': [(aggregate_count, 'id')]
+        },
+        # {
+        #     'label': 'Word Count by Mood',
+        #     'group': 'mood_id',
+        #     'series': [(aggregate_sum, 'word_count')]
+        # },
+    ]
+
+# class NoteTimeChartView(GroupByChartView):
+#     datamodel = SQLAInterface(Note)
+#     base_filters = [['created_by', FilterEqualFunction, get_user]]
+#     chart_title = 'Grouped Create Date'
+#     chart_type = 'AreaChart' #'ColumnChart' 'PieChart''AreaChart'
+#     label_columns = NoteModelView.label_columns
+#     definitions = [
+#         {
+#             'label': 'Character Count by Month/Year',
+#             'group': 'month_year',
+#             'formatter': pretty_month_year,
+#             'series': [(aggregate_sum, 'text_count')]
+#         },
+#         {
+#             'label': 'Character Count by Year',
+#             'group': 'year',
+#             'formatter': pretty_year,
+#             'series': [(aggregate_sum, 'text_count')]
+#         },
+#         {
+#             'label': 'Count of Notes by Month/Year',
+#             'group': 'month_year',
+#             'formatter': pretty_month_year,
+#             'series': [(aggregate_count, 'id'),(aggregate_avg, 'word_count')]
+#         },
+#         {
+#             'label': 'Count of Notes by Year',
+#             'group': 'year',
+#             'formatter': pretty_year,
+#             'series': [(aggregate_count, 'id'),(aggregate_avg, 'word_count')]
+#         }
+#     ]
 
 # appbuilder.add_view(GroupModelView, "List Groups", icon="fa-folder-open-o", category="Notes", category_icon='fa-envelope')
 # appbuilder.add_view(JobModelView, "Jobs", icon="fa-comment", category="Jobs", category_icon='fa-comment')
@@ -269,7 +316,7 @@ appbuilder.add_view(MoodModelView, "List Moods", icon="fa-tags", category="Thoug
 
 appbuilder.add_view(NoteChartView, "Notes Chart", icon="fa-dashboard", category="Charts")
 appbuilder.add_view(NoteTimeChartView, "Notes Time Chart", icon="fa-dashboard", category="Charts")
-
+appbuilder.add_view(IdeaChartView, "Ideas Chart", icon="fa-dashboard", category="Charts")
 appbuilder.security_cleanup()
 """
     Application wide 404 error handler
