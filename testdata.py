@@ -1,37 +1,74 @@
-# import logging
-# from app import db
-# from app.models import ContactGroup, Gender, Contact
-# import random
-# from datetime import datetime
+import logging
+from app import db
+from app.models import Note,Idea,IdeaNotes,Tags,Mood
+import random
+from datetime import datetime
 
-# log = logging.getLogger(__name__)
+
+def date_now(self):
+    s = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    return s
+
+addmood = ['Positive','Neutral', 'Negative','Mixed']
+  
+
+# def pre_fill_db():
+#     try:
+#         db.session.add(Mood(mood_name='Positive',is_active=True))#,created_by="1",created_date=date_now))
+#         #db.session.add(Mood(mood_name='Neutral',is_active=True,created_by="1",created_date=date_now))
+#         # db.session.add(Mood(mood_name='Negative',is_active=1,created_by=1,created_date=datetime.datetime.now()))
+#         # db.session.add(Mood(mood_name='Mixed',is_active=1,created_by=1,created_date=datetime.datetime.now()))
+#         # db.session.add(Tags(tag_name='Unknown',is_active=1,created_by=1,created_date=datetime.datetime.now()))
+#         # db.session.add(Tags(tag_name='Work',is_active=1,created_by=1,created_date=datetime.datetime.now()))
+#         # db.session.add(Tags(tag_name='Life',is_active=1,created_by=1,created_date=datetime.datetime.now()))
+#         # db.session.add(Tags(tag_name='Fun',is_active=1,created_by=1,created_date=datetime.datetime.now()))
+#         # db.session.add(JobNoteStatus(status = 'Applied'))
+#         # db.session.add(JobNoteStatus(status = 'Follow Up'))
+#         # db.session.add(JobNoteStatus(status = 'Interview - Phone'))
+#         # db.session.add(JobNoteStatus(status = 'Interview - In Persone'))
+#         # db.session.add(JobNoteStatus(status = 'Offer-Negotiation'))
+#         # db.session.add(JobNoteStatus(status = 'Offer-Rejected'))
+#         # db.session.add(JobNoteStatus(status = 'Offer - Accepted'))
+#         # db.session.add(JobNoteStatus(status = 'Close'))
+#         db.session.commit()
+#     except:
+#         db.session.rollback()
+
+# pre_fill_db()
+
+log = logging.getLogger(__name__)
+
+def date_now(self):
+    s = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    return s
+
+addmood = ['Positive','Neutral', 'Negative','Mixed']
 
 # def get_random_name(names_list, size=1):
 #     name_lst = [names_list[random.randrange(0, len(names_list))].capitalize() for i in range(0, size)]
 #     return " ".join(name_lst)
 
+try:
+    db.session.query(Tags).delete()
+    db.session.query(Mood).delete()
+    # db.session.query(Note).delete()
+except:
+    db.session.rollback()
 
-# try:
-#     db.session.query(Contact).delete()
-#     db.session.query(Gender).delete()
-#     db.session.query(ContactGroup).delete()
-#     db.session.commit()
-# except:
-#     db.session.rollback()
+try:
+    ideas = []
+    ideas.append(Idea(name='This One'))
+    ideas.append(Idea(name='This Two'))
+    ideas.append(Idea(name='This Three'))
+    db.session.add(ideas[0])
+    db.session.add(ideas[1])
+    db.session.add(ideas[2])
+    print(ideas[0].id)
+    db.session.commit()
+except ValueError:
+    log.error("Creating Ideas: %s", ValueError)
+    db.session.rollback()
 
-# try:
-#     groups = []
-#     groups.append(ContactGroup(name='Friends'))
-#     groups.append(ContactGroup(name='Family'))
-#     groups.append(ContactGroup(name='Work'))
-#     db.session.add(groups[0])
-#     db.session.add(groups[1])
-#     db.session.add(groups[2])
-#     print groups[0].id
-#     db.session.commit()
-# except Exception, e:
-#     log.error("Creating Groups: %s", e)
-#     db.session.rollback()
 
 # try:
 #     genders = []

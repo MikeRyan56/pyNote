@@ -1,0 +1,5 @@
+Id,my_note,is_active,created_by,created_date
+1,Positive,1,1,2016-12-07 17:11:00
+2,Neutral,1,1,2016-11-25 2:47
+3,Negative,1,1,2016-12-07 17:11:00
+4,Negative - but not by me,1,2,2016-12-07 17:11:00

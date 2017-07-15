@@ -34,35 +34,19 @@ from flask_appbuilder.widgets import FormHorizontalWidget, FormInlineWidget, For
     appbuilder.add_view(MyModelView, "My View", icon="fa-folder-open-o", category="My Category", category_icon='fa-envelope')
 """
 
+def date_now(self):
+    s = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    return s
 
-def pre_fill_db():
-    try:
-        db.session.add(Mood(mood_name='Positive'))
-        db.session.add(Mood(mood_name='Neutral'))
-        db.session.add(Mood(mood_name='Negative'))
-        db.session.add(Mood(mood_name='Mixed'))
-        db.session.add(Tags(tag_name='Unknown'))
-        db.session.add(Tags(tag_name='Work'))
-        db.session.add(Tags(tag_name='Life'))
-        db.session.add(Tags(tag_name='Fun'))
-        # db.session.add(JobNoteStatus(status = 'Applied'))
-        # db.session.add(JobNoteStatus(status = 'Follow Up'))
-        # db.session.add(JobNoteStatus(status = 'Interview - Phone'))
-        # db.session.add(JobNoteStatus(status = 'Interview - In Persone'))
-        # db.session.add(JobNoteStatus(status = 'Offer-Negotiation'))
-        # db.session.add(JobNoteStatus(status = 'Offer-Rejected'))
-        # db.session.add(JobNoteStatus(status = 'Offer - Accepted'))
-        # db.session.add(JobNoteStatus(status = 'Close'))
-        db.session.commit()
-    except:
-        db.session.rollback()
-
-pre_fill_db()
-
+# function to get the currently logged in user
+# user to set created_by in multiple tables
+# also to filter by on charts and views
+def get_user():
+    return g.user.id
 
 class IdeaNotesGeneralView(ModelView):
     datamodel = SQLAInterface(IdeaNotes)
-
+    # related_views = [IdeaGeneralView]
     label_columns = {'idea_group': 'idea'}
     list_columns = ['title', 'is_active','created_date','idea_group']
 
@@ -89,31 +73,23 @@ class IdeaNotesGeneralView(ModelView):
             {'fields': ['is_active','created_date'], 'expanded': False}),
         ]
 
-
-
 class IdeaMasterView(MasterDetailView):
     datamodel = SQLAInterface(Idea)
     related_views = [IdeaNotesGeneralView]
-
+    base_filters = [['created_by', FilterEqualFunction, get_user]]
 
 class IdeaGeneralView(ModelView):
     datamodel = SQLAInterface(Idea)
     related_views = [IdeaNotesGeneralView]
-
-
+    base_filters = [['created_by', FilterEqualFunction, get_user]]
 
 class MoodModelView(ModelView):
     datamodel = SQLAInterface(Mood)
+    base_filters = [['created_by', FilterEqualFunction, get_user]]
 
 class TagsModelView(ModelView):
     datamodel = SQLAInterface(Tags)
-
-
-# function to get the currently logged in user
-# user to set created_by in multiple tables
-# also to filter by on charts and views
-def get_user():
-    return g.user.id
+    base_filters = [['created_by', FilterEqualFunction, get_user]]
 
 class NoteModelView(ModelView):
     datamodel = SQLAInterface(Note)
@@ -167,10 +143,6 @@ class NoteModelView(ModelView):
 #     related_views = [NoteModelView]
 #     search_columns = ['mood_name']
 
-
-
-
-
 def pretty_month_year(value):
     return calendar.month_name[value.month] + ' ' + str(value.year)
 
@@ -179,9 +151,9 @@ def pretty_year(value):
 
 class NoteChartView(GroupByChartView):
     datamodel = SQLAInterface(Note)
-    chart_title = 'Grouped Notes'
+    chart_title = 'Notes Character and Word Counts '
     label_columns = NoteModelView.label_columns
-    chart_type = 'ColumnChart' #'ColumnChart' #PieChart'
+    chart_type = 'ColumnChart' #'ColumnChart' 'PieChart''AreaChart''LineChart'
     base_filters = [['created_by', FilterEqualFunction, get_user]]
 
     definitions = [
@@ -215,8 +187,8 @@ class NoteChartView(GroupByChartView):
 class NoteTimeChartView(GroupByChartView):
     datamodel = SQLAInterface(Note)
     base_filters = [['created_by', FilterEqualFunction, get_user]]
-    chart_title = 'Grouped Create Date'
-    chart_type = 'AreaChart' #'ColumnChart' 'PieChart''AreaChart'
+    chart_title = 'Notes by Created Date'
+    chart_type = 'AreaChart'  #'ColumnChart' 'PieChart''AreaChart''LineChart'
     label_columns = NoteModelView.label_columns
     definitions = [
         {
@@ -248,8 +220,8 @@ class NoteTimeChartView(GroupByChartView):
 class IdeaChartView(GroupByChartView):
     datamodel = SQLAInterface(Idea)
     chart_title = 'Ideas by Status'
-    label_columns = IdeaGeneralView.label_columns
-    chart_type = 'ColumnChart' #'ColumnChart' #PieChart'
+    label_columns = IdeaNotesGeneralView.label_columns
+    chart_type = 'PieChart' #'ColumnChart' 'PieChart''AreaChart''LineChart'
     base_filters = [['created_by', FilterEqualFunction, get_user]]
 
     definitions = [
@@ -259,65 +231,56 @@ class IdeaChartView(GroupByChartView):
             'series': [(aggregate_count, 'id')]
         },
         # {
-        #     'label': 'Word Count by Mood',
-        #     'group': 'mood_id',
-        #     'series': [(aggregate_sum, 'word_count')]
+        #     'label': 'Idea by User',
+        #     'group': 'idea_group',
+        #     'series': [(aggregate_count, 'id')]
         # },
     ]
 
-# class NoteTimeChartView(GroupByChartView):
-#     datamodel = SQLAInterface(Note)
-#     base_filters = [['created_by', FilterEqualFunction, get_user]]
-#     chart_title = 'Grouped Create Date'
-#     chart_type = 'AreaChart' #'ColumnChart' 'PieChart''AreaChart'
-#     label_columns = NoteModelView.label_columns
-#     definitions = [
-#         {
-#             'label': 'Character Count by Month/Year',
-#             'group': 'month_year',
-#             'formatter': pretty_month_year,
-#             'series': [(aggregate_sum, 'text_count')]
-#         },
-#         {
-#             'label': 'Character Count by Year',
-#             'group': 'year',
-#             'formatter': pretty_year,
-#             'series': [(aggregate_sum, 'text_count')]
-#         },
-#         {
-#             'label': 'Count of Notes by Month/Year',
-#             'group': 'month_year',
-#             'formatter': pretty_month_year,
-#             'series': [(aggregate_count, 'id'),(aggregate_avg, 'word_count')]
-#         },
-#         {
-#             'label': 'Count of Notes by Year',
-#             'group': 'year',
-#             'formatter': pretty_year,
-#             'series': [(aggregate_count, 'id'),(aggregate_avg, 'word_count')]
-#         }
-#     ]
+class IdeaTimeChartView(GroupByChartView):
+    
+    datamodel = SQLAInterface(Idea)
+    base_filters = [['created_by', FilterEqualFunction, get_user]]
+    chart_title = 'Ideas by Create Date'
+    chart_type = 'AreaChart' #'ColumnChart' 'PieChart''AreaChart''LineChart'
+    label_columns = IdeaNotesGeneralView.label_columns
+    definitions = [
+        {
+            'label': 'Character Count by Month/Year',
+            'group': 'month_year',
+            'formatter': pretty_month_year,
+            'series': [(aggregate_count, 'id')]
+        },
+        {
+            'label': 'Character Count by Month/Year',
+            'group': 'month_year',
+            'formatter': pretty_month_year,
+            'series': [(aggregate_count, 'id'), (aggregate_count, 'idea_group')]
+        },
+    ]
+
+
 
 # appbuilder.add_view(GroupModelView, "List Groups", icon="fa-folder-open-o", category="Notes", category_icon='fa-envelope')
 # appbuilder.add_view(JobModelView, "Jobs", icon="fa-comment", category="Jobs", category_icon='fa-comment')
 # appbuilder.add_separator("Jobs")
 
-appbuilder.add_view(IdeaMasterView, "Update Ideas", icon="fa-folder-open-o", category="Ideas")
-appbuilder.add_separator("Ideas")
 appbuilder.add_view(IdeaGeneralView, "List of Ideas", icon="fa-folder-open-o", category="Ideas")
+appbuilder.add_separator("Ideas")
+appbuilder.add_view(IdeaMasterView, "Add/Update Ideas", icon="fa-folder-open-o", category="Ideas")
 appbuilder.add_view(IdeaNotesGeneralView, "List Notes", icon="fa-envelope", category="Ideas")
 
-
-
-appbuilder.add_view(NoteModelView, "Notes", icon="fa-comment", category="Thoughts", category_icon='fa-comment')
-appbuilder.add_separator("Thoughts")
-appbuilder.add_view(TagsModelView, "List Tags", icon="fa-tags", category="Thoughts", category_icon='fa-tags')
-appbuilder.add_view(MoodModelView, "List Moods", icon="fa-tags", category="Thoughts", category_icon='fa-tags')
+appbuilder.add_view(NoteModelView, "Notes", icon="fa-comment", category="Notes", category_icon='fa-comment')
+appbuilder.add_separator("Notes")
+appbuilder.add_view(TagsModelView, "List Tags", icon="fa-tags", category="Notes", category_icon='fa-tags')
+appbuilder.add_view(MoodModelView, "List Moods", icon="fa-tags", category="Notes", category_icon='fa-tags')
 
 appbuilder.add_view(NoteChartView, "Notes Chart", icon="fa-dashboard", category="Charts")
 appbuilder.add_view(NoteTimeChartView, "Notes Time Chart", icon="fa-dashboard", category="Charts")
 appbuilder.add_view(IdeaChartView, "Ideas Chart", icon="fa-dashboard", category="Charts")
+appbuilder.add_view(IdeaTimeChartView, "Ideas Time Chart", icon="fa-dashboard", category="Charts")
 appbuilder.security_cleanup()
+
 """
     Application wide 404 error handler
 """

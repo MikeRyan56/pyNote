@@ -17,4 +17,9 @@ Create Admin - fabmanager create-admin
 
 run application - fabmanager run
 
+Default account
+UserName: Admin
+Password: $Password
+
+Create a new account for yourself deactivate this one (delete is recommend or needed)
 

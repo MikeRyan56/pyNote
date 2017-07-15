@@ -20,10 +20,20 @@ AuditMixin will add automatic timestamp of created and modified by who
 """
 mindate = datetime.date(datetime.MINYEAR, 1, 1)
 
+def get_user():
+    return g.user.id
+
+def set_date_plus7(self):
+    p7 = datetime.datetime.now() + datetime.timedelta(days=7)
+    return p7.strftime("%Y-%m-%d %H:%M:%S")
+
         
 class Mood(Model): # Change Gender to Mood
     id = Column(Integer, primary_key=True)
     mood_name = Column(String(150), unique = True, nullable=False)
+    is_active = Column(Boolean, unique=False, default=True)
+    created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) # Column(Integer)
+    created_date = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
 
     def __unicode__(self):
         return self.mood_name
@@ -38,6 +48,9 @@ class Mood(Model): # Change Gender to Mood
 class Tags(Model):
     id = Column(Integer, primary_key=True)
     tag_name = Column(String(150), unique = True, nullable=False)
+    is_active = Column(Boolean, unique=False, default=True)
+    created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) # Column(Integer)
+    created_date = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
 
 
     def __unicode__(self):
@@ -48,13 +61,6 @@ class Tags(Model):
 
     def __str__(self):
         return self.tag_name
-
-def get_user():
-    return g.user.id
-
-def set_date_plus7(self):
-    p7 = datetime.datetime.now() + datetime.timedelta(days=7)
-    return p7.strftime("%Y-%m-%d %H:%M:%S")
 
 assoc_tags_notes = Table('tags_notes', Model.metadata,
                                       Column('id', Integer, primary_key=True),
@@ -90,13 +96,30 @@ class Note(Model): # Change Contact to Note
         return datetime.datetime(date.year, 1, 1)
 
 
-
 class Idea(BaseMixin, Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(50), unique = True, nullable=False)
     is_active = Column(Boolean, unique=False, default=True)
     created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) # Column(Integer)
     created_date = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
+
+    @hybrid_property
+    def word_count(self):
+        wc = re.findall("(\S+)", self.my_note)
+        return len(wc)
+ 
+    @hybrid_property
+    def text_count(self):
+        s = self.my_note
+        return len(self.my_note)
+
+    def month_year(self):
+        date = self.created_date # or mindate
+        return datetime.datetime(date.year, date.month, 1) or mindate
+
+    def year(self):
+        date = self.created_date # or mindate
+        return datetime.datetime(date.year, 1, 1)
 
     def __repr__(self):
         return self.name
@@ -110,6 +133,7 @@ class IdeaNotes(BaseMixin, Base):
     is_active = Column(Boolean, unique=False, default=True)
     created_date = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
     follow_up_date = Column(DateTime, default=set_date_plus7, nullable=False)
+    created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) # Column(Integer)
     idea_id = Column(Integer, ForeignKey('idea.id'), nullable=False)
     idea_group = relationship("Idea")
     
@@ -117,6 +141,14 @@ class IdeaNotes(BaseMixin, Base):
     def word_count(self):
         wc = re.findall("(\S+)", self.description)
         return len(wc)
+
+    def month_year(self):
+        date = self.created_date # or mindate
+        return datetime.datetime(date.year, date.month, 1) or mindate
+
+    def year(self):
+        date = self.created_date # or mindate
+        return datetime.datetime(date.year, 1, 1)
 
     def __repr__(self):
         return self.title
