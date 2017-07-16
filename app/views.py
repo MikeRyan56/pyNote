@@ -20,6 +20,8 @@ from flask_appbuilder.fields import AJAXSelectField
 from flask_appbuilder.widgets import FormHorizontalWidget, FormInlineWidget, FormVerticalWidget, ListBlock,ListItem,ListThumbnail
 from .models import Note, Tags, Mood, Idea, IdeaNotes
 # from .models import JobNoteStatus, JobTitle, Job, JobNotes
+from app.demodata import pre_fill_db
+
 """
     Create your Views::
 
@@ -33,6 +35,7 @@ from .models import Note, Tags, Mood, Idea, IdeaNotes
 
     appbuilder.add_view(MyModelView, "My View", icon="fa-folder-open-o", category="My Category", category_icon='fa-envelope')
 """
+
 
 def date_now(self):
     s = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -293,5 +296,6 @@ def page_not_found(e):
     return render_template('404.html', base_template=appbuilder.base_template, appbuilder=appbuilder), 404
 
 db.create_all()
-
+#pre_fill_db()
+pre_fill_db()
 

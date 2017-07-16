@@ -28,11 +28,11 @@ def set_date_plus7(self):
     return p7.strftime("%Y-%m-%d %H:%M:%S")
 
         
-class Mood(Model): # Change Gender to Mood
+class Mood(Model):
     id = Column(Integer, primary_key=True)
     mood_name = Column(String(150), unique = True, nullable=False)
     is_active = Column(Boolean, unique=False, default=True)
-    created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) # Column(Integer)
+    created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) 
     created_date = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
 
     def __unicode__(self):
@@ -48,9 +48,9 @@ class Mood(Model): # Change Gender to Mood
 class Tags(Model):
     id = Column(Integer, primary_key=True)
     tag_name = Column(String(150), unique = True, nullable=False)
-    is_active = Column(Boolean, unique=False, default=True)
-    created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) # Column(Integer)
-    created_date = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
+    # is_active = Column(Boolean, unique=False, default=True)
+    # created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) 
+    # created_date = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
 
 
     def __unicode__(self):
@@ -68,7 +68,7 @@ assoc_tags_notes = Table('tags_notes', Model.metadata,
                                       Column('notes_id', Integer, ForeignKey('note.id'))
 )
 
-class Note(Model): # Change Contact to Note
+class Note(Model): 
     id = Column(Integer, primary_key=True)
     mood_id = Column(Integer, ForeignKey('mood.id'), nullable=False)
     mood = relationship("Mood")
@@ -128,13 +128,12 @@ class Idea(BaseMixin, Base):
 
 class IdeaNotes(BaseMixin, Base):
     id = Column(Integer, primary_key=True)
-    # name = Column(String(200), default=name_note, nullable=False)
     title =  Column(String(150), nullable=False)
     description = Column(Text())
     is_active = Column(Boolean, unique=False, default=True)
     created_date = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
     follow_up_date = Column(DateTime, default=set_date_plus7, nullable=False)
-    created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) # Column(Integer)
+    created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) 
     idea_id = Column(Integer, ForeignKey('idea.id'), nullable=False)
     idea_group = relationship("Idea")
     
