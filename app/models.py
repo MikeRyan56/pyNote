@@ -98,7 +98,8 @@ class Note(Model): # Change Contact to Note
 
 class Idea(BaseMixin, Base):
     id = Column(Integer, primary_key=True)
-    name = Column(String(50), unique = True, nullable=False)
+    name = Column(String(50), nullable=False)
+    description = Column(Text(),nullable=False)
     is_active = Column(Boolean, unique=False, default=True)
     created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) # Column(Integer)
     created_date = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
@@ -216,11 +217,11 @@ class IdeaNotes(BaseMixin, Base):
 
 
     def month_year(self):
-        date = self.create_date # or mindate
+        date = self.created_date # or mindate
         return datetime.datetime(date.year, date.month, 1) or mindate
 
     def year(self):
-        date = self.create_date # or mindate
+        date = self.created_date # or mindate
         return datetime.datetime(date.year, 1, 1)
 
     

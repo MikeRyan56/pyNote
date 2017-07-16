@@ -10,16 +10,16 @@ from flask_login import LoginManager, UserMixin, login_required
 from flask import g
 from flask_appbuilder.models.sqla.filters import FilterStartsWith, FilterEqualFunction
 import calendar
-from .models import Note, Tags, Mood, Idea, IdeaNotes
-# from .models import JobNoteStatus, JobTitle, Job, JobNotes
+
 from wtforms import validators
 from wtforms.fields import TextField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 import datetime
 from flask_appbuilder.fieldwidgets import Select2AJAXWidget, Select2SlaveAJAXWidget, Select2Widget
 from flask_appbuilder.fields import AJAXSelectField
-from flask_appbuilder.widgets import FormHorizontalWidget, FormInlineWidget, FormVerticalWidget
-
+from flask_appbuilder.widgets import FormHorizontalWidget, FormInlineWidget, FormVerticalWidget, ListBlock,ListItem,ListThumbnail
+from .models import Note, Tags, Mood, Idea, IdeaNotes
+# from .models import JobNoteStatus, JobTitle, Job, JobNotes
 """
     Create your Views::
 
@@ -49,7 +49,7 @@ class IdeaNotesGeneralView(ModelView):
     # related_views = [IdeaGeneralView]
     label_columns = {'idea_group': 'idea'}
     list_columns = ['title', 'is_active','created_date','idea_group']
-
+    list_widget = ListBlock # ListBlock,ListItem,ListThumbnail
     base_order = ('created_date', 'desc')
 
     show_fieldsets = [
@@ -77,11 +77,13 @@ class IdeaMasterView(MasterDetailView):
     datamodel = SQLAInterface(Idea)
     related_views = [IdeaNotesGeneralView]
     base_filters = [['created_by', FilterEqualFunction, get_user]]
+    base_order = ('created_date', 'desc')
 
 class IdeaGeneralView(ModelView):
     datamodel = SQLAInterface(Idea)
     related_views = [IdeaNotesGeneralView]
     base_filters = [['created_by', FilterEqualFunction, get_user]]
+    list_widget = ListBlock # ListBlock,ListItem,ListThumbnail
 
 class MoodModelView(ModelView):
     datamodel = SQLAInterface(Mood)
@@ -97,6 +99,7 @@ class NoteModelView(ModelView):
     base_order = ('created_date', 'desc')
     # related_views = [MoodModelView, TagsModelView]
     list_columns = ['mood','tags','created_date']
+    list_widget = ListBlock # ListBlock,ListItem,ListThumbnail
     show_fieldsets = [
         ('Summary', {'fields': ['mood','tags','my_note', 'word_count']}),
         (
@@ -239,10 +242,10 @@ class IdeaChartView(GroupByChartView):
 
 class IdeaTimeChartView(GroupByChartView):
     
-    datamodel = SQLAInterface(Idea)
+    datamodel = SQLAInterface(IdeaNotes)
     base_filters = [['created_by', FilterEqualFunction, get_user]]
     chart_title = 'Ideas by Create Date'
-    chart_type = 'AreaChart' #'ColumnChart' 'PieChart''AreaChart''LineChart'
+    chart_type = 'ColumnChart' #'ColumnChart' 'PieChart''AreaChart''LineChart'
     label_columns = IdeaNotesGeneralView.label_columns
     definitions = [
         {
@@ -255,7 +258,7 @@ class IdeaTimeChartView(GroupByChartView):
             'label': 'Character Count by Month/Year',
             'group': 'month_year',
             'formatter': pretty_month_year,
-            'series': [(aggregate_count, 'id'), (aggregate_count, 'idea_group')]
+            'series': [(aggregate_count, 'idea_id'), (aggregate_count, 'id')]
         },
     ]
 
