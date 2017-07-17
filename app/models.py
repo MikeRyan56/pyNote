@@ -5,7 +5,7 @@ from flask_appbuilder.security.sqla.models import User
 from sqlalchemy import Table, Column, Integer, String, ForeignKey, Text, DateTime, Boolean, Date
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.hybrid import hybrid_property
-import datetime
+from datetime import datetime, timedelta,MINYEAR,date
 import re
 from flask_appbuilder import Base
 
@@ -18,22 +18,23 @@ AuditMixin will add automatic timestamp of created and modified by who
 
 
 """
-mindate = datetime.date(datetime.MINYEAR, 1, 1)
+mindate = date(MINYEAR, 1, 1)
 
 def get_user():
     return g.user.id
 
 def set_date_plus7(self):
-    p7 = datetime.datetime.now() + datetime.timedelta(days=7)
-    return p7.strftime("%Y-%m-%d %H:%M:%S")
+    p7 = datetime.now() + timedelta(days=7)
+    # return p7.strftime("%Y-%m-%d %H:%M:%S")
+    return p7.isoformat(timespec='seconds')
 
         
 class Mood(Model):
     id = Column(Integer, primary_key=True)
     mood_name = Column(String(150), unique = True, nullable=False)
-    is_active = Column(Boolean, unique=False, default=True)
-    created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) 
-    created_date = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
+    # is_active = Column(Boolean, unique=False, default=True)
+    # created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) 
+    # created_date = Column(DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
 
     def __unicode__(self):
         return self.mood_name
@@ -50,7 +51,7 @@ class Tags(Model):
     tag_name = Column(String(150), unique = True, nullable=False)
     # is_active = Column(Boolean, unique=False, default=True)
     # created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) 
-    # created_date = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
+    # created_date = Column(DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
 
 
     def __unicode__(self):
@@ -75,7 +76,7 @@ class Note(Model):
     tags = relationship('Tags', secondary=assoc_tags_notes, backref='note')
     my_note = Column(Text(), nullable=False)
     created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) # Column(Integer)
-    created_date = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
+    created_date = Column(DateTime, default=datetime.now().isoformat(timespec='seconds'), nullable=False)
 
     @hybrid_property
     def word_count(self):
@@ -89,11 +90,11 @@ class Note(Model):
     
     def month_year(self):
         date = self.created_date # or mindate
-        return datetime.datetime(date.year, date.month, 1) or mindate
+        return datetime(date.year, date.month, 1) or mindate
 
     def year(self):
         date = self.created_date # or mindate
-        return datetime.datetime(date.year, 1, 1)
+        return datetime(date.year, 1, 1)
 
 
 class Idea(BaseMixin, Base):
@@ -102,7 +103,7 @@ class Idea(BaseMixin, Base):
     description = Column(Text(),nullable=False)
     is_active = Column(Boolean, unique=False, default=True)
     created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) # Column(Integer)
-    created_date = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
+    created_date = Column(DateTime, default=datetime.now().isoformat(timespec='seconds'), nullable=False)
 
     @hybrid_property
     def word_count(self):
@@ -116,11 +117,11 @@ class Idea(BaseMixin, Base):
 
     def month_year(self):
         date = self.created_date # or mindate
-        return datetime.datetime(date.year, date.month, 1) or mindate
+        return datetime(date.year, date.month, 1) or mindate
 
     def year(self):
         date = self.created_date # or mindate
-        return datetime.datetime(date.year, 1, 1)
+        return datetime(date.year, 1, 1)
 
     def __repr__(self):
         return self.name
@@ -131,7 +132,7 @@ class IdeaNotes(BaseMixin, Base):
     title =  Column(String(150), nullable=False)
     description = Column(Text())
     is_active = Column(Boolean, unique=False, default=True)
-    created_date = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
+    created_date = Column(DateTime, default=datetime.now().isoformat(timespec='seconds'), nullable=False)
     follow_up_date = Column(DateTime, default=set_date_plus7, nullable=False)
     created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) 
     idea_id = Column(Integer, ForeignKey('idea.id'), nullable=False)
@@ -144,11 +145,11 @@ class IdeaNotes(BaseMixin, Base):
 
     def month_year(self):
         date = self.created_date # or mindate
-        return datetime.datetime(date.year, date.month, 1) or mindate
+        return datetime(date.year, date.month, 1) or mindate
 
     def year(self):
         date = self.created_date # or mindate
-        return datetime.datetime(date.year, 1, 1)
+        return datetime(date.year, 1, 1)
 
     def __repr__(self):
         return self.title
@@ -167,7 +168,7 @@ class IdeaNotes(BaseMixin, Base):
 #     website = Column(String(150))
 #     is_active = Column(Boolean, unique=False, default=True)
 #     created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) # Column(Integer)
-#     created_date = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
+#     created_date = Column(DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
     
 #     def __repr__(self):
 #         return self.company
@@ -178,7 +179,7 @@ class IdeaNotes(BaseMixin, Base):
 #     career_site_link = Column(String(150))
 #     is_active = Column(Boolean, unique=False, default=True)
 #     created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) # Column(Integer)
-#     created_date = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
+#     created_date = Column(DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
 #     job_id = Column(Integer, ForeignKey('job.id'), nullable=False)
 #     job = relationship("Job")
 
@@ -206,7 +207,7 @@ class IdeaNotes(BaseMixin, Base):
 #     note = Column(Text(4000))
 #     follow_up_date = Column(DateTime, default=set_date_plus7, nullable=False)
 #     created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) # Column(Integer)
-#     created_date = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
+#     created_date = Column(DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
 #     jobstatus_id = Column(Integer, ForeignKey('jobnotestatus.id'), nullable=False)
 #     jobstatus = relationship("JobNoteStatus")
 #     jobtitle_id = Column(Integer, ForeignKey('jobtitle.id'), nullable=False)
@@ -217,10 +218,10 @@ class IdeaNotes(BaseMixin, Base):
 
     def month_year(self):
         date = self.created_date # or mindate
-        return datetime.datetime(date.year, date.month, 1) or mindate
+        return datetime(date.year, date.month, 1) or mindate
 
     def year(self):
         date = self.created_date # or mindate
-        return datetime.datetime(date.year, 1, 1)
+        return datetime(date.year, 1, 1)
 
     

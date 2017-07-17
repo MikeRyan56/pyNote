@@ -14,7 +14,7 @@ import calendar
 from wtforms import validators
 from wtforms.fields import TextField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-import datetime
+from datetime import datetime, timedelta,MINYEAR,date
 from flask_appbuilder.fieldwidgets import Select2AJAXWidget, Select2SlaveAJAXWidget, Select2Widget
 from flask_appbuilder.fields import AJAXSelectField
 from flask_appbuilder.widgets import FormHorizontalWidget, FormInlineWidget, FormVerticalWidget, ListBlock,ListItem,ListThumbnail
@@ -38,7 +38,7 @@ from app.demodata import pre_fill_db
 
 
 def date_now(self):
-    s = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    s = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return s
 
 # function to get the currently logged in user
@@ -90,11 +90,11 @@ class IdeaGeneralView(ModelView):
 
 class MoodModelView(ModelView):
     datamodel = SQLAInterface(Mood)
-    base_filters = [['created_by', FilterEqualFunction, get_user]]
+    #base_filters = [['created_by', FilterEqualFunction, get_user]]
 
 class TagsModelView(ModelView):
     datamodel = SQLAInterface(Tags)
-    base_filters = [['created_by', FilterEqualFunction, get_user]]
+    #base_filters = [['created_by', FilterEqualFunction, get_user]]
 
 class NoteModelView(ModelView):
     datamodel = SQLAInterface(Note)
@@ -159,7 +159,7 @@ class NoteChartView(GroupByChartView):
     datamodel = SQLAInterface(Note)
     chart_title = 'Notes Character and Word Counts '
     label_columns = NoteModelView.label_columns
-    chart_type = 'PieChart' #'ColumnChart' 'PieChart''AreaChart''LineChart'
+    chart_type = 'ColumnChart' #'ColumnChart' 'PieChart''AreaChart''LineChart'
     base_filters = [['created_by', FilterEqualFunction, get_user]]
 
     definitions = [
@@ -252,16 +252,16 @@ class IdeaTimeChartView(GroupByChartView):
     label_columns = IdeaNotesGeneralView.label_columns
     definitions = [
         {
-            'label': 'Character Count by Month/Year',
+            'label': 'Count by Month/Year',
             'group': 'month_year',
             'formatter': pretty_month_year,
             'series': [(aggregate_count, 'id')]
         },
         {
-            'label': 'Character Count by Month/Year',
-            'group': 'month_year',
-            'formatter': pretty_month_year,
-            'series': [(aggregate_count, 'idea_id'), (aggregate_count, 'id')]
+            'label': 'Idea Count by Year',
+            'group': 'year',
+            'formatter': pretty_year,
+            'series': [(aggregate_count, 'is_active')]
         },
     ]
 
@@ -296,6 +296,21 @@ def page_not_found(e):
     return render_template('404.html', base_template=appbuilder.base_template, appbuilder=appbuilder), 404
 
 db.create_all()
-#pre_fill_db()
-pre_fill_db()
+
+def db_check():
+    s = db.session.query(Mood).count()
+    print(s)
+    return s
+def user_check():
+    s = db.session.query('ab_user').count()
+    print(s)
+    return s
+
+if db_check()==0:
+    pre_fill_db()
+    print(db_check())
+
+
+
+
 
