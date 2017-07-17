@@ -9,4 +9,11 @@ EXPOSE 8080
 RUN pip install -r requirements.txt
 # WORKDIR /data
 VOLUME /data
-ENTRYPOINT ["python", "run.py"]
+ENTRYPOINT ["fabmanager create-admin"]
+ENTRYPOINT ["Admin"]
+ENTRYPOINT ["Administrator"]
+ENTRYPOINT ["Account"]
+ENTRYPOINT ["pyNote@DevSetGo.com"]
+ENTRYPOINT ["$Password"]
+ENTRYPOINT ["$Password"]
+ENTRYPOINT ["fabmanager run"]
