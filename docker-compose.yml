@@ -1,7 +1,0 @@
-web:
-  build: ./web
-  container_name: pyNote
-  ports:
-    - "8080:8080"
-  volumes:
-    - .:/pynote

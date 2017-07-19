@@ -4,17 +4,69 @@ from app.models import Note,Idea,IdeaNotes,Tags,Mood
 import random
 from datetime import datetime, timedelta
 import lorem
+# import sys
+# #from . import const as c
 
-def random_date():
-    start = datetime.now()
-    end = start + timedelta(days=365)
-    rd = start + (end - start) * random.random()
-    print(rd.isoformat(timespec='seconds'))
-    return rd.isoformat(timespec='seconds')
+# def random_date():
+#     start = datetime.now()
+#     end = start + timedelta(days=365)
+#     rd = start + (end - start) * random.random()
+#     print(rd.isoformat(timespec='seconds'))
+#     return rd.isoformat(timespec='seconds')
 
-# start = datetime.now()
-# end = start + timedelta(days=-365)
-# random_date = start + (end - start) * random.random()
+# # start = datetime.now()
+# # end = start + timedelta(days=-365)
+# # random_date = start + (end - start) * random.random()
+
+# def import_application(app_package, appbuilder):
+#     sys.path.append(os.getcwd())
+#     # try:
+#     #     _app = __import__(app_package)
+#     # except Exception as e:
+#     #     click.echo(click.style('Was unable to import {0} Error: {1}'.format(app_package, e), fg='red'))
+#     #     exit(3)
+#     # if hasattr(_app, 'appbuilder'):
+#     #     return getattr(_app, appbuilder)
+#     # else:
+#     #     click.echo(click.style('There in no appbuilder var on your package, you can use appbuilder parameter to config', fg='red'))
+#     #     exit(3)
+
+# def createAdmin():
+#     try:
+        
+#         app ='app'
+#         appbuilder = 'appbuilder'
+#         _appbuilder = import_application(app, appbuilder)
+#         # auth_type = {c.AUTH_DB:"Database Authentications",
+#         #             c.AUTH_OID:"OpenID Authentication",
+#         #             c.AUTH_LDAP:"LDAP Authentication",
+#         #             c.AUTH_REMOTE_USER:"WebServer REMOTE_USER Authentication",
+#         #             c.AUTH_OAUTH:"OAuth Authentication"}
+#         username = 'Admin'
+#         firstname = 'Administrator'
+#         lastname = 'Account'
+#         email = 'pyNote@DevSetGo.com'
+#         role_admin = _appbuilder.sm.find_role(_appbuilder.sm.auth_role_admin)
+#         password = '$Password'
+
+#         # click.echo(click.style('Recognized {0}.'.format(auth_type.get(_appbuilder.sm.auth_type,'No Auth method')), fg='green'))
+#         role_admin = _appbuilder.sm.find_role(_appbuilder.sm.auth_role_admin)
+#         user = _appbuilder.sm.add_user(username, firstname, lastname, email, role_admin, password)
+#         if user:
+#             print('Admin User {0} created.'.format(username))
+#             # click.echo(click.style('Admin User {0} created.'.format(username), fg='green'))
+#         else:
+#             print('No user created an error occured')
+#             # click.echo(click.style('No user created an error occured', fg='red'))
+
+#         # admin = []
+#         # db.session.add(ab_user[0])
+#         # db.session.commit()
+#     except ValueError:
+#         log.error("Creating Admin: %s", ValueError)
+#         print(db.error)
+#         db.session.rollback()
+#     return
 
 # Prefill the database with sample data
 def pre_fill_db():

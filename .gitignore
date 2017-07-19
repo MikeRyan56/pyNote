@@ -5,6 +5,9 @@
 ./.idea
 ./.idea/*
 
+#Docker
+Docker
+
 #virtualenv
 env
 
