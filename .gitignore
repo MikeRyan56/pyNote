@@ -6,10 +6,13 @@
 ./.idea/*
 
 #Docker
-Docker
+docker
+#Azure
+azure
 
 #virtualenv
 env
+test
 
 #pycache
 __pycache__

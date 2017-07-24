@@ -20,7 +20,7 @@ from flask_appbuilder.fields import AJAXSelectField
 from flask_appbuilder.widgets import FormHorizontalWidget, FormInlineWidget, FormVerticalWidget, ListBlock,ListItem,ListThumbnail
 from .models import Note, Tags, Mood, Idea, IdeaNotes
 # from .models import JobNoteStatus, JobTitle, Job, JobNotes
-# from app.demodata import pre_fill_db, createAdmin
+from app.demodata import pre_fill_db #, createAdmin
 
 """
     Create your Views::
@@ -159,7 +159,7 @@ class NoteChartView(GroupByChartView):
     datamodel = SQLAInterface(Note)
     chart_title = 'Notes Character and Word Counts '
     label_columns = NoteModelView.label_columns
-    chart_type = 'ColumnChart' #'ColumnChart' 'PieChart''AreaChart''LineChart'
+    chart_type = 'PieChart' #'ColumnChart' 'PieChart''AreaChart''LineChart'
     base_filters = [['created_by', FilterEqualFunction, get_user]]
 
     definitions = [
@@ -299,10 +299,10 @@ db.create_all()
 
 # createAdmin()
 
-# def db_check():
-#     s = db.session.query(Mood).count()
-#     print(s)
-#     return s
+def db_check():
+    s = db.session.query(Mood).count()
+    print(s)
+    return s
 # def user_check():
 #     s = db.session.query('ab_user').count()
 #     print(s)

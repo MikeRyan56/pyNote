@@ -26,8 +26,7 @@ def get_user():
 def set_date_plus7(self):
     p7 = datetime.now() + timedelta(days=7)
     # return p7.strftime("%Y-%m-%d %H:%M:%S")
-    return p7.isoformat(timespec='seconds')
-
+    return p7.strftime("%Y-%m-%d %H:%M:%S")
         
 class Mood(Model):
     id = Column(Integer, primary_key=True)
@@ -76,7 +75,12 @@ class Note(Model):
     tags = relationship('Tags', secondary=assoc_tags_notes, backref='note')
     my_note = Column(Text(), nullable=False)
     created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) # Column(Integer)
-    created_date = Column(DateTime, default=datetime.now().isoformat(timespec='seconds'), nullable=False)
+    created_date = Column(DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
+
+    # @hybrid_property
+    # def first_words(self):
+    #     x = self.my_note[:10]
+    #     return x
 
     @hybrid_property
     def word_count(self):
@@ -99,11 +103,11 @@ class Note(Model):
 
 class Idea(BaseMixin, Base):
     id = Column(Integer, primary_key=True)
-    name = Column(String(50), nullable=False)
+    name = Column(String(150), nullable=False)
     description = Column(Text(),nullable=False)
     is_active = Column(Boolean, unique=False, default=True)
     created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) # Column(Integer)
-    created_date = Column(DateTime, default=datetime.now().isoformat(timespec='seconds'), nullable=False)
+    created_date = Column(DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
 
     @hybrid_property
     def word_count(self):
@@ -132,7 +136,7 @@ class IdeaNotes(BaseMixin, Base):
     title =  Column(String(150), nullable=False)
     description = Column(Text())
     is_active = Column(Boolean, unique=False, default=True)
-    created_date = Column(DateTime, default=datetime.now().isoformat(timespec='seconds'), nullable=False)
+    created_date = Column(DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
     follow_up_date = Column(DateTime, default=set_date_plus7, nullable=False)
     created_by = Column(Integer, ForeignKey('ab_user.id'), default=get_user, nullable=False) 
     idea_id = Column(Integer, ForeignKey('idea.id'), nullable=False)
