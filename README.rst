@@ -8,11 +8,11 @@ Run the application
 ----------------------------------------------------------
 create virtual environment - virtualenv env
 Install Requirements in Virtual Environment - pip install -r requirements.txt
-run application - fabmanager run
+fabmanger create-admin
+- follow instructions
 
-Default account
-UserName: Admin
-Password: $Password
+fabmanger Run
+- application is now running
 
-Create a new account for yourself deactivate this one (delete is recommend or needed)
+-test and modify code as you want.
 
