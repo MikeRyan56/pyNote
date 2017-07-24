@@ -9,10 +9,11 @@ Run the application
 create virtual environment - virtualenv env
 Install Requirements in Virtual Environment - pip install -r requirements.txt
 fabmanger create-admin
+
 - follow instructions
 
 fabmanger Run
-- application is now running
 
--test and modify code as you want.
+- application is now running
+-test and modify code as you want
 
