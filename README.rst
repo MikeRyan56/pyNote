@@ -7,6 +7,7 @@ https://github.com/dpgaspar
 Run the application
 ----------------------------------------------------------
 create virtual environment - virtualenv env
+
 Install Requirements in Virtual Environment - pip install -r requirements.txt
 
 fabmanger create-admin
