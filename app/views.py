@@ -89,6 +89,28 @@ class IdeaGeneralView(ModelView):
     base_filters = [['created_by', FilterEqualFunction, get_user]]
     list_widget = ListBlock # ListBlock,ListItem,ListThumbnail
     list_columns = ['name','is_active','created_date', 'days_created']
+    show_fieldsets = [
+        ('Summary', {'fields': ['name','description']}),
+        (
+            'Idea Note Details',
+            {'fields': ['is_active','created_date'], 'expanded': False}),
+    ]
+
+    add_fieldsets = [
+        ('Summary', {'fields': ['name','description']}),
+        (
+            'Idea Note Details',
+            {'fields': ['is_active','created_date'], 'expanded': False}),
+        ]
+
+    edit_fieldsets = [
+        ('Summary', {'fields': ['name','description']}),
+        (
+            'Idea Note Details',
+            {'fields': ['is_active','created_date'], 'expanded': False}),
+        ]
+
+
 
 class MoodModelView(ModelView):
     datamodel = SQLAInterface(Mood)
