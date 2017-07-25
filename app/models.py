@@ -110,14 +110,21 @@ class Idea(BaseMixin, Base):
     created_date = Column(DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), nullable=False)
 
     @hybrid_property
+    def days_created(self):
+        cd = self.created_date
+        n = datetime.now()
+        diff = n - cd
+        return diff.days
+
+    @hybrid_property
     def word_count(self):
-        wc = re.findall("(\S+)", self.my_note)
+        wc = re.findall("(\S+)", self.description)
         return len(wc)
  
     @hybrid_property
     def text_count(self):
         s = self.my_note
-        return len(self.my_note)
+        return len(self.description)
 
     def month_year(self):
         date = self.created_date # or mindate

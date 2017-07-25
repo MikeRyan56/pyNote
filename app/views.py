@@ -81,12 +81,14 @@ class IdeaMasterView(MasterDetailView):
     related_views = [IdeaNotesGeneralView]
     base_filters = [['created_by', FilterEqualFunction, get_user]]
     base_order = ('created_date', 'desc')
+    list_columns = ['name']
 
 class IdeaGeneralView(ModelView):
     datamodel = SQLAInterface(Idea)
     related_views = [IdeaNotesGeneralView]
     base_filters = [['created_by', FilterEqualFunction, get_user]]
     list_widget = ListBlock # ListBlock,ListItem,ListThumbnail
+    list_columns = ['name','is_active','created_date', 'days_created']
 
 class MoodModelView(ModelView):
     datamodel = SQLAInterface(Mood)
@@ -276,7 +278,7 @@ appbuilder.add_separator("Thoughts")
 appbuilder.add_view(IdeaGeneralView, "List of Ideas", icon="fa-folder-open-o", category="Thoughts")
 appbuilder.add_separator("Thoughts")
 appbuilder.add_view(IdeaMasterView, "Add/Update Ideas", icon="fa-folder-open-o", category="Thoughts")
-appbuilder.add_view(IdeaNotesGeneralView, "List Notes", icon="fa-envelope", category="Thoughts")
+appbuilder.add_view(IdeaNotesGeneralView, "List Idea Notes", icon="fa-envelope", category="Thoughts")
 
 appbuilder.add_view(NoteChartView, "Notes Chart", icon="fa-dashboard", category="Charts")
 appbuilder.add_view(NoteTimeChartView, "Notes Time Chart", icon="fa-dashboard", category="Charts")
