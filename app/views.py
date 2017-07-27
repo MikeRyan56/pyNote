@@ -20,7 +20,9 @@ from flask_appbuilder.fields import AJAXSelectField
 from flask_appbuilder.widgets import FormHorizontalWidget, FormInlineWidget, FormVerticalWidget, ListBlock,ListItem,ListThumbnail
 from .models import Note, Tags, Mood, Idea, IdeaNotes
 # from .models import JobNoteStatus, JobTitle, Job, JobNotes
-from app.demodata import pre_fill_db #, createAdmin
+#from app.demodata import pre_fill_db #, createAdmin
+
+
 
 """
     Create your Views::
