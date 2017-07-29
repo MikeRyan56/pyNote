@@ -3,6 +3,10 @@ PyNote - Journal, Idea Tracker and Other things
 This application is based and built off Flask-AppBuilder by dpgaspar
 https://github.com/dpgaspar
 
+Running Demo here - http://pynote.devsetgo.com
+
+UserName: Admin Password: $Password
+
 
 Run the application
 ----------------------------------------------------------
