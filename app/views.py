@@ -19,8 +19,7 @@ from flask_appbuilder.fieldwidgets import Select2AJAXWidget, Select2SlaveAJAXWid
 from flask_appbuilder.fields import AJAXSelectField
 from flask_appbuilder.widgets import FormHorizontalWidget, FormInlineWidget, FormVerticalWidget, ListBlock,ListItem,ListThumbnail
 from .models import Note, Tags, Mood, Idea, IdeaNotes
-# from .models import JobNoteStatus, JobTitle, Job, JobNotes
-#from app.demodata import pre_fill_db #, createAdmin
+
 
 
 
@@ -323,21 +322,7 @@ def page_not_found(e):
 
 db.create_all()
 
-# createAdmin()
 
-def db_check():
-    s = db.session.query(Mood).count()
-    print(s)
-    return s
-# def user_check():
-#     s = db.session.query('ab_user').count()
-#     print(s)
-#     return s
-
-# if db_check()==0:
-#     pre_fill_db()
-    
-#     print(db_check())
 
 
 
