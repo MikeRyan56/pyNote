@@ -116,10 +116,12 @@ class IdeaGeneralView(ModelView):
 class MoodModelView(ModelView):
     datamodel = SQLAInterface(Mood)
     #base_filters = [['created_by', FilterEqualFunction, get_user]]
-
+    list_columns = ['mood_name']
+    
 class TagsModelView(ModelView):
     datamodel = SQLAInterface(Tags)
     #base_filters = [['created_by', FilterEqualFunction, get_user]]
+    list_columns = ['tag_name']
 
 class NoteModelView(ModelView):
     datamodel = SQLAInterface(Note)
@@ -223,25 +225,25 @@ class NoteTimeChartView(GroupByChartView):
     label_columns = NoteModelView.label_columns
     definitions = [
         {
-            'label': 'Character Count by Month/Year',
+            'label': 'Character/Word by Month/Year',
             'group': 'month_year',
             'formatter': pretty_month_year,
-            'series': [(aggregate_sum, 'text_count')]
+            'series': [(aggregate_sum, 'text_count'), (aggregate_sum, 'word_count')]
         },
         {
-            'label': 'Character Count by Year',
+            'label': 'Character/Word by Year',
             'group': 'year',
             'formatter': pretty_year,
-            'series': [(aggregate_sum, 'text_count')]
+            'series': [(aggregate_sum, 'text_count'), (aggregate_sum, 'word_count')]
         },
         {
-            'label': 'Count of Notes by Month/Year',
+            'label': 'Notes and Words by Month/Year',
             'group': 'month_year',
             'formatter': pretty_month_year,
             'series': [(aggregate_count, 'id'),(aggregate_avg, 'word_count')]
         },
         {
-            'label': 'Count of Notes by Year',
+            'label': 'Notes and Words by Year',
             'group': 'year',
             'formatter': pretty_year,
             'series': [(aggregate_count, 'id'),(aggregate_avg, 'word_count')]

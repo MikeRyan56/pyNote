@@ -1,8 +1,5 @@
-Flask_Login==0.2.11
 Flask_AppBuilder==1.9.1
-Flask==0.12.2
 lorem==0.1.1
-WTForms==2.1
-SQLAlchemy==1.1.11
-applicationinsights==0.10.0
-uwsgi==2.0.15
+azure
+psycopg2
+uwsgi
