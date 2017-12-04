@@ -22,6 +22,6 @@ __pycache__
 #Files to ignore
 tags_note.csv
 # app.db
-
+*.ini
 #Visual Studio Code
 .vscode
