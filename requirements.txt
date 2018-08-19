@@ -1,5 +1,0 @@
-Flask_AppBuilder==1.9.1
-lorem==0.1.1
-azure
-psycopg2
-uwsgi

@@ -4,6 +4,7 @@
 ./build/*
 ./.idea
 ./.idea/*
+.idea
 
 #Docker
 docker
@@ -21,7 +22,12 @@ __pycache__
 
 #Files to ignore
 tags_note.csv
+
+# Application DB - Uncomment if needed for demo update
 # app.db
+
+# Initialization Files
 *.ini
+
 #Visual Studio Code
 .vscode
