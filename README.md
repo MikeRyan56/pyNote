@@ -1,6 +1,5 @@
 # PyNote
-: Journal, Idea Tracker and Other things
-: This application is based and built off [Flask-AppBuilder](https://github.com/dpgaspar/Flask-AppBuilder) by [dpgaspar](https://github.com/dpgaspar)
+Journal, Idea Tracker and Other things. This application is based and built off [Flask-AppBuilder](https://github.com/dpgaspar/Flask-AppBuilder) by [dpgaspar](https://github.com/dpgaspar)
 
 running demo hosted at pynote.devsetgo.com
 * username Admin
