@@ -1,0 +1,6 @@
+Flask_AppBuilder==1.11.1
+lorem==0.1.1
+#azure
+psycopg2
+#uwsgi
+#gunicorn
