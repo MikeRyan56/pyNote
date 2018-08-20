@@ -8,7 +8,7 @@
 # ENTRYPOINT ["python"]
 # CMD ["wsgi.py"]
 
-FROM python:3.7
+FROM python:3.6-alpine
 MAINTAINER Mike Ryan "mikeryan56@gmail.com"
 EXPOSE 5000
 #EXPOSE 5000/udp

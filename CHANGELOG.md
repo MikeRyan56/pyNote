@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## [Unreleased]
 
+## [0.1.2] - 2018-08-20
+### Added
+* Demo database (was accidentally removed)
+
+### Changed
+* Change to Python 3.6-alpine for docker build from 3.7 - reduced image size by 1GB
+* WSGI.py is no longer in debug for production use. 
+
 ## [0.1.2] - 2018-08-18
 ### Added
 * environment variables for Docker-Compose to support using nginx-proxy and [letsencrypt-nginx-proxy-companion](https://hub.docker.com/r/jrcs/letsencrypt-nginx-proxy-companion/)
