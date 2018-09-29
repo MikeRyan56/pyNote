@@ -3,18 +3,26 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
-## [Unreleased]
+### Todo
+* Have gunicorn check how many cores that can be run and automatically set.
 
-## [0.1.2] - 2018-08-20
+## [0.1.4] - 2018-09-29
+### Added
+* Gunicorn config file
+
+### Changed
+*  dockerfile to start gunicorn correctly
+* gunicorn will run 4 workers now.
+
+
+
+## [0.1.3] - 2018-08-20
 ### Added
 * Demo database (was accidentally removed)
 
 ### Changed
 * Change to Python 3.6-alpine for docker build from 3.7 - reduced image size by 1GB
 * WSGI.py is no longer in debug for production use. 
-
-### Bug Fix
-* Demo database missing, have added back to project and updated GitIgnore to not pull database.
 
 ## [0.1.2] - 2018-08-18
 ### Added
