@@ -17,5 +17,9 @@ ENV LETSENCRYPT_HOST pynote.devsetgo.com
 COPY . /app
 WORKDIR /app
 RUN pip install -r requirements.txt
-ENTRYPOINT ["python"]
-CMD ["wsgi.py"]
+#ENTRYPOINT ["python"]
+# CMD ["wsgi.py"]
+# CMD ["python","wsgi.py"]
+# ENV FLASK_APP run.py
+# CMD ["gunicorn", "--workers=2", "--bind=0.0.0.0:8000", "app:app"]
+CMD ["gunicorn", "-c", "gunicorn_cfg.py", "app:app"]

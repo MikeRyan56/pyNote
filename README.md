@@ -33,3 +33,4 @@ Run the application
 ### Regular version
 : To be built later
 
+gunicorn -c gunicorn_cfg.py app:app
