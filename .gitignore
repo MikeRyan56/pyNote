@@ -1,4 +1,5 @@
 *.pyc
+__pycache__
 *.db
 ./tmp
 ./build/*
@@ -14,6 +15,7 @@ bu
 
 #virtualenv
 env
+venv
 test
 
 #pycache
