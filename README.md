@@ -29,7 +29,7 @@ Run the application
     - username: admin
     - password: $Password
 
+* or clone and run (gunicorn -c gunicorn_cfg.py app:app)
 ----------------------------------------------------------
 ### Regular version
 : To be built later
-

@@ -3,7 +3,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
-## [Unreleased]
+### Todo
+* Have gunicorn check how many cores that can be run and automatically set.
+
+## [0.1.4] - 2018-09-29
+### Added
+* Gunicorn config file
+
+### Changed
+*  dockerfile to start gunicorn correctly
+* gunicorn will run 4 workers now.
+
+
 
 ## [0.1.3] - 2018-08-20
 ### Added
