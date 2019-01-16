@@ -1,3 +1,5 @@
+[![alt text](https://img.shields.io/badge/calver-YYYY.MINOR-22bfda.svg "Calver")](http://calver.org)
+
 # PyNote
 Journal, Idea Tracker and Other things. This application is based and built off [Flask-AppBuilder](https://github.com/dpgaspar/Flask-AppBuilder) by [dpgaspar](https://github.com/dpgaspar)
 

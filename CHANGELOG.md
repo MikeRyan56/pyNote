@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Todo
 * Have gunicorn check how many cores that can be run and automatically set.
 
+## [2019.1] - 2019-01-15
+### Added
+
+### Changed
+* Moving to Calendar versioning of year and build number (e.g. build 1, 2, 3)
+* file cleanup
+* update of github reference
+* gunicorn will run as many threads as available (cpu * 2 + 1).
+
 ## [0.1.4] - 2018-09-29
 ### Added
 * Gunicorn config file
