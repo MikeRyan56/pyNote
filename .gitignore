@@ -1,3 +1,7 @@
+#project files
+_venv/
+
+# standard 
 *.pyc
 __pycache__
 *.db

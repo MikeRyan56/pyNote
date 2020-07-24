@@ -1,6 +1,4 @@
-Flask_AppBuilder==1.11.1
-lorem==0.1.1
-#azure
 #psycopg2
-#uwsgi
-gunicorn
+Flask_AppBuilder==2.3.4 # from 1.11.1
+lorem==0.1.1
+gunicorn==20.0.4 # from none

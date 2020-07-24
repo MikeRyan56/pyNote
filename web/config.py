@@ -1,9 +1,10 @@
 import os
+import secrets
 from flask_appbuilder.security.manager import AUTH_OID, AUTH_REMOTE_USER, AUTH_DB, AUTH_LDAP, AUTH_OAUTH
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 # Your App secret key
-SECRET_KEY = '\2\1thisismyscretkey\1\2\e\y\y\h'
+SECRET_KEY = secrets.token_urlsafe(64)
 
 # The SQLAlchemy connection string.
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
@@ -91,9 +92,9 @@ IMG_UPLOAD_URL = '/static/uploads/'
 # you can create your own and easily use them placing them on the same dir structure to override
 # APP_THEME = "bootstrap-theme.css"  # default bootstrap
 # APP_THEME = "cerulean.css"
-#APP_THEME = "amelia.css"
+# APP_THEME = "amelia.css"
 # APP_THEME = "cosmo.css"
-#APP_THEME = "cyborg.css"  
+# APP_THEME = "cyborg.css"  
 #APP_THEME = "flatly.css"
 #APP_THEME = "journal.css"
 #APP_THEME = "readable.css"
@@ -102,4 +103,4 @@ APP_THEME = "slate.css"
 # APP_THEME = "spacelab.css"
 # APP_THEME = "united.css"
 # APP_THEME = "yeti.css"
-
+# APP_THEME = ""

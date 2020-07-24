@@ -221,7 +221,7 @@ class NoteTimeChartView(GroupByChartView):
     datamodel = SQLAInterface(Note)
     base_filters = [['created_by', FilterEqualFunction, get_user]]
     chart_title = 'Notes by Created Date'
-    chart_type = 'AreaChart'  #'ColumnChart' 'PieChart''AreaChart''LineChart'
+    # chart_type = 'AreaChart'  #'ColumnChart' 'PieChart''AreaChart''LineChart'
     label_columns = NoteModelView.label_columns
     definitions = [
         {
